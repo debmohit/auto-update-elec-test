@@ -1,11 +1,14 @@
 module.exports = {
   packagerConfig: {
     asar: true,
+    extraResource: [
+      './latest-linux.yml'
+    ]
   },
   rebuildConfig: {},
   makers: [
     {
-      name: '@electron-forge/maker-squirrel',
+      name: '@reforged/maker-appimage',
       config: {},
     },
     {
@@ -27,4 +30,19 @@ module.exports = {
       config: {},
     },
   ],
+  publishers: [
+    {
+      name: "@electron-forge/publisher-github",
+      config: {
+        authors: "Mohit",
+        description: "Sample test",
+          repository: {
+            owner: "debmohit",
+            name: "auto-update-elec-test"
+          },
+        prerelease: false,
+        draft: false,
+      }
+    }
+  ]
 };

@@ -1,0 +1,8 @@
+version: 1.0.21
+files:
+  - url: auto-update-example-1.0.21-x64.AppImage
+    sha512: pEdaEEJJJxiFphb6JotNNzo224S1E3GQCnQ9NoE5u7Z0P9l0mQ1bkjzNVTWqfmG0VsqLNsuCmV9x+JIW0wBi4w==
+    size: 175998144
+path: auto-update-example-1.0.21-x64.AppImage
+sha512: pEdaEEJJJxiFphb6JotNNzo224S1E3GQCnQ9NoE5u7Z0P9l0mQ1bkjzNVTWqfmG0VsqLNsuCmV9x+JIW0wBi4w==
+releaseDate: '2023-12-03T17:39:18.384Z'
