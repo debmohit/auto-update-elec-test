@@ -27,7 +27,9 @@
 </head>
 <body>
   <h1>Digitkart Terminal App</h1>
+  <progress id="downloadProgress" value="0" max="100" class="hidden"></progress>
   <p id="version"></p>
+  <div id="downloadMessage"></div>
   <div id="notification" class="hidden">
     <p id="message"></p>
     <button id="close-button" onClick="closeNotification()">
@@ -40,6 +42,11 @@
   <script>
     const { ipcRenderer } = require('electron');
     const version = document.getElementById('version');
+    const notification = document.getElementById('notification');
+    const restartButton = document.getElementById('restart-button');
+    const message = document.getElementById('message');
+    const progressBar = document.getElementById('downloadProgress');
+
     console.log("================Started")
     ipcRenderer.send('app_version');
     ipcRenderer.on('app_version', (event, arg) => {
@@ -48,24 +55,52 @@
     });
 
     ipcRenderer.on('update_available', () => {
-      ipcRenderer.removeAllListeners('update_available');
-      message.innerText = 'A new update is available. Downloading now...';
+      console.log("++++++Update Available++++++")
+      // ipcRenderer.removeAllListeners('update_available');
+      message.innerText = 'A new update is available.';
+      restartButton.classList.remove('hidden');
+      restartButton.innerText = "Update";
       notification.classList.remove('hidden');
     });
 
     ipcRenderer.on('update_downloaded', () => {
-      ipcRenderer.removeAllListeners('update_downloaded');
       message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
+      restartButton.innerText = `Restart`;
       restartButton.classList.remove('hidden');
       notification.classList.remove('hidden');
     });
 
+    ipcRenderer.on('download-progress', (event, progress) => {
+      progressBar.classList.remove('hidden');
+      restartButton.classList.remove('hidden');
+      progressBar.value = progress;
+    });
+
+    ipcRenderer.on('download-complete', (event, filePath) => {
+      const downloadMessage = document.getElementById('downloadMessage');
+      // notification.innerHTML = `New update downloaded!! Click on restart to update.`;
+      downloadMessage.innerHTML = `Download complete! File saved at: ${filePath}`;
+      restartButton.classList.add('hidden');
+    });
+
+    ipcRenderer.on('download-error', (event, errorMessage) => {
+      const downloadMessage = document.getElementById('downloadMessage');
+      downloadMessage.innerHTML = `Download error: ${errorMessage}`;
+    });
+
     function closeNotification() {
+      ipcRenderer.send('reset-version-flag');
+      progressBar.classList.add('hidden');
+      downloadMessage.classList.add('hidden');
       notification.classList.add('hidden');
     }
     
     function restartApp() {
-      ipcRenderer.send('restart_app');
+      if(restartButton.innerText === 'Update') {
+        ipcRenderer.send('download');
+      } else {
+        ipcRenderer.send('restart_app');
+      }
     }
   </script>
 </body>

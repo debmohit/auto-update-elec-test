@@ -1,7 +1,7 @@
 {
   "name": "auto-update-example",
   "productName": "auto-update-example",
-  "version": "1.0.20",
+  "version": "1.0.15",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
@@ -10,6 +10,10 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
+  },
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
   },
   "keywords": [],
   "author": {
